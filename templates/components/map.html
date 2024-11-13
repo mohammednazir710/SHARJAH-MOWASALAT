@@ -1,0 +1,25 @@
+{% load static %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{% static 'custom.css' %}">
+
+<div id="map"></div>
+
+<!-- Location Info Box -->
+<div id="locationInfo"
+style="display: none; position: absolute; bottom: 0px; left: 0px; background: rgba(255, 255, 255, 0.9); padding: 25px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); z-index: 1000; width: auto;">
+<button id="closeInfo"
+    style="position: absolute; top: 5px; right: 5px; border: none; background: transparent; font-size: 16px; cursor: pointer;">&times;</button>
+<strong>Location:</strong> <span id="locationName">Loading...</span><br>
+<strong>Distance:</strong> <span id="distance">???</span>
+</div>
+
+<!-- Current Location Button -->
+{% include 'components/current_location.html' %}
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="{% static 'main.js' %}"></script>
