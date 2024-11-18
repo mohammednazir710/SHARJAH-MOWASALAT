@@ -67,6 +67,27 @@
             text-align: right;
             color: #777;
         }
+
+        .schedule-card .route-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .schedule-card .route-info .left-icons,
+        .schedule-card .route-info .right-icons {
+            display: flex;
+            gap: 5px;
+            /* Adjust spacing between icons if needed */
+        }
+
+        .schedule-card .route-info .route {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            max-width: max-content;
+            /* Optional: To make the route text stand out */
+        }
     </style>
 </head>
 
@@ -75,7 +96,8 @@
     <div class="container-fluid">
         <!-- Map header section -->
         <div class="map-header d-flex align-items-center">
-            <a href="{% url 'index' %}" class="back-btn border rounded-circle px-2"><i class="fas fa-arrow-left"></i></a>
+            <a href="{% url 'index' %}" class="back-btn border rounded-circle px-2"><i
+                    class="fas fa-arrow-left"></i></a>
         </div>
 
         <!-- Bus Schedule Content -->
@@ -84,27 +106,73 @@
                 <!-- Title -->
                 <h5 class="schedule-title">Bus Schedules</h5>
 
-                <!-- Search Results -->
                 <div class="search-results">
+                    <!-- Starting Point -->
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-location-dot"></i></span>
                         </div>
-                        <div class="form-control">Current Location</div>
+                        <select id="start-point" class="form-control form-select">
+                            <option value="">Select Starting Point</option>
+                            {% for point in starting_points %}
+                            <option value="{{ point.code }}">{{ point.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+
+                    <!-- Destination -->
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                         </div>
-                        <div class="form-control">City Centre Sharjah</div>
+                        <select id="end-point" class="form-control form-select" disabled>
+                            <option value="">Select Destination</option>
+                        </select>
                     </div>
                 </div>
+
+                <!-- Schedule Cards -->
+                <div id="schedule-container" style="display: none;">
+                    <div class="text-center font-weight-bold mb-3">Dep : Now</div>
+                    <div id="schedule-cards">
+                        <!-- Schedule cards will be loaded here dynamically -->
+                    </div>
+                </div>
+
+
+                <!-- <script>
+                    document.getElementById('start-point').addEventListener('change', function () {
+                        const startPoint = this.value;
+                        const endPointSelect = document.getElementById('end-point');
+                
+                        // Clear the current options in the second select field
+                        endPointSelect.innerHTML = '<option value="">Select Destination</option>';
+                
+                        if (startPoint) {
+                            // Fetch the dependent options from the server
+                            fetch(`/get-end-points/${startPoint}/`)  // Adjust the URL as per your routing
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Populate the second select field with new options
+                                    data.forEach(location => {
+                                        const option = document.createElement('option');
+                                        option.value = location.code;
+                                        option.textContent = location.name;
+                                        endPointSelect.appendChild(option);
+                                    });
+                                })
+                                .catch(error => console.error('Error fetching end points:', error));
+                        }
+                    });
+                </script> -->
+
+
 
                 <!-- Departure Time -->
                 <div class="text-center font-weight-bold mb-3">Dep : Now</div>
 
                 <!-- Schedule Cards -->
-                <div class="schedule-card">
+                <!-- <div class="schedule-card">
                     <div class="route-info">
                         <i class="fas fa-walking"></i>
                         <i class="fas fa-bus"></i>
@@ -147,10 +215,185 @@
                         <span>3:10 PM</span>
                     </div>
                     <div class="fare">AED 4.50 - 6.00</div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
+
+    <!-- <script>
+        const startPointSelect = document.getElementById('start-point');
+        const endPointSelect = document.getElementById('end-point');
+        const scheduleContainer = document.getElementById('schedule-container');
+        const scheduleCards = document.getElementById('schedule-cards');
+    
+        // Initially hide the schedule container
+        scheduleContainer.style.display = 'none';
+    
+        // Listen for changes on the first select field
+        startPointSelect.addEventListener('change', function () {
+            const startPoint = this.value;
+    
+            // Clear and disable the second select field
+            endPointSelect.innerHTML = '<option value="">Select Destination</option>';
+            endPointSelect.disabled = true;
+            scheduleContainer.style.display = 'none';
+    
+            if (startPoint) {
+                // Fetch end points from the server
+                fetch(`/get-end-points/${startPoint}/`) // Adjust this URL to match your setup
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            // Populate the second select field
+                            data.forEach(location => {
+                                const option = document.createElement('option');
+                                option.value = location.code;
+                                option.textContent = location.name;
+                                endPointSelect.appendChild(option);
+                            });
+                            endPointSelect.disabled = false; // Enable the field
+                        }
+                    })
+                    .catch(error => console.error('Error fetching end points:', error));
+            }
+        });
+    
+        // Listen for changes on the second select field
+        endPointSelect.addEventListener('change', function () {
+            const endPoint = this.value;
+    
+            // Clear existing schedules
+            scheduleCards.innerHTML = '';
+            scheduleContainer.style.display = 'none';
+    
+            if (endPoint) {
+                // Fetch schedules from the server
+                fetch(`/get-schedules/${endPoint}/`) // Adjust this URL to match your setup
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            // Populate the schedule cards
+                            data.forEach(schedule => {
+                                const card = `
+                                    <div class="schedule-card">
+                                        <div class="route-info">
+                                            <i class="fas fa-walking"></i>
+                                            <i class="fas fa-bus"></i>
+                                            <span class="badge badge-secondary">${schedule.route}</span>
+                                            <i class="fas fa-bus"></i>
+                                            <i class="fas fa-walking"></i>
+                                        </div>
+                                        <div class="times">
+                                            <span>${schedule.dispatch}</span>
+                                            <span>${schedule.arrival}</span>
+                                        </div>
+                                        <div class="fare">${schedule.fare}</div>
+                                    </div>
+                                `;
+                                scheduleCards.innerHTML += card;
+                            });
+                            scheduleContainer.style.display = 'block'; // Show schedules
+                        }
+                    })
+                    .catch(error => console.error('Error fetching schedules:', error));
+            }
+        });
+    </script> -->
+    <script>
+        const startPointSelect = document.getElementById('start-point');
+        const endPointSelect = document.getElementById('end-point');
+        const scheduleContainer = document.getElementById('schedule-container');
+        const scheduleCards = document.getElementById('schedule-cards');
+
+        // Reset the schedule container
+        const resetScheduleContainer = () => {
+            scheduleContainer.style.display = 'none';
+            scheduleCards.innerHTML = '';
+        };
+
+        // Handle starting point change
+        startPointSelect.addEventListener('change', function () {
+            const startPoint = this.value;
+
+            // Reset second field and disable it
+            endPointSelect.innerHTML = '<option value="">Select Destination</option>';
+            endPointSelect.disabled = true;
+            resetScheduleContainer();
+
+            if (startPoint) {
+                // Fetch destinations
+                fetch(`/get-end-points/${startPoint}/`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(location => {
+                                const option = document.createElement('option');
+                                option.value = location.code;
+                                option.textContent = location.name;
+                                endPointSelect.appendChild(option);
+                            });
+                            endPointSelect.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching end points:', error);
+                    });
+            }
+        });
+
+        // Handle destination change
+        endPointSelect.addEventListener('change', function () {
+            const endPoint = this.value;
+            const startPoint = startPointSelect.value;
+
+            // Reset schedule container
+            resetScheduleContainer();
+
+            if (endPoint) {
+                // Fetch schedules
+                fetch(`/get-schedules/${startPoint}/${endPoint}/`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.length > 0) {
+                            data.forEach(schedule => {
+                                const card = `
+    <div class="schedule-card">
+        <div class="route-info">
+            <div class="left-icons">
+                <i class="fas fa-walking"></i>
+                <i class="fas fa-bus"></i>
+            </div>
+            <span class="route badge badge-secondary">Route ${schedule.route}</span>
+            <div class="right-icons">
+                <i class="fas fa-bus"></i>
+                <i class="fas fa-walking"></i>
+            </div>
+        </div>
+        <div class="times">
+            <span>${schedule.dispatch}</span>
+            <span>${schedule.arrival}</span>
+        </div>
+        <div class="fare">${schedule.fare}</div>
+    </div>
+`;
+
+                                scheduleCards.innerHTML += card;
+                            });
+                            scheduleContainer.style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching schedules:', error);
+                    });
+            }
+        });
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
