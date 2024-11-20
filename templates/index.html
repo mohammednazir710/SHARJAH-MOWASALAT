@@ -26,7 +26,60 @@
             font-style: normal;
         }
 
-       
+        /* #route-details {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        } */
+
+        #route-details ol {
+            padding-left: 20px;
+        }
+
+        #route-details ol li {
+            margin-bottom: 5px;
+        }
+
+        #route-details {
+            position: absolute;
+            bottom: 50px;
+            /* Adjust to match the height of the bottom menu */
+            left: 0;
+            width: 100%;
+            height: 80%;
+            /* Height of the sliding container */
+            background: rgba(255, 255, 255, 0.9);
+            /* Semi-transparent white */
+            transform: translateY(100%);
+            /* Initially hidden */
+            transition: transform 0.4s ease-in-out;
+            /* Smooth transition */
+            z-index: 999;
+            overflow-y: scroll;
+            padding: 20px 50px;
+            padding-bottom: 50px;
+            /* Behind the bottom menu */
+        }
+
+        #route-details.visible {
+            transform: translateY(0);
+            /* Slide up into view */
+        }
+
+
+        .bottom-menu a {
+            transition: background 0.3s;
+        }
+
+        .bottom-menu a:hover {
+            background: #777;
+        }
     </style>
 </head>
 
@@ -34,14 +87,28 @@
 
     <!-- Map container -->
     <div id="map"></div>
+    {% if route_view %}
+    <!-- Bottom menu bar -->
+     
+    <div id="route-details" class="hidden">
+        <!-- Content for list view goes here -->
 
+    </div>
+    <div class="bottom-menu">
+        <a href="#" id="map_view" class=" border p-2">Map View</a>
+        <a href="#" id="list_view" class=" border p-2">List View</a>
+
+    </div>
+    {% else %}
     <!-- Bottom menu bar -->
     <div class="bottom-menu">
         <a href="#" id="home" class="rounded-circle border p-2"><i class="fas fa-home "></i></a>
         <a href="{% url 'route' %}" id="route" class="rounded-circle border p-2"><i class="fas fa-route"></i></a>
-        <a href="{% url 'schadule' %}" id="schedule" class="rounded-circle border p-2"><i class="fas fa-calendar-alt"></i></a>
+        <a href="{% url 'schadule' %}" id="schedule" class="rounded-circle border p-2"><i
+                class="fas fa-calendar-alt"></i></a>
         <a href="#" id="settings" class="rounded-circle border p-2"><i class="fas fa-cog"></i></a>
     </div>
+    {% endif %}
 
     <!-- Location Info Box -->
     <div id="locationInfo"
@@ -53,6 +120,7 @@
     </div>
 
 
+    <div id=""></div>
 
 
     <!-- Current Location Button -->
@@ -66,9 +134,33 @@
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="static/main.js"></script>
 
-    
-    
+    <script>
+        document.getElementById('list_view').addEventListener('click', function (e) {
+            e.preventDefault();
+            const container = document.getElementById('route-details');
+            container.classList.add('visible'); // Show the container
+        });
 
+        document.getElementById('map_view').addEventListener('click', function (e) {
+            e.preventDefault();
+            const container = document.getElementById('route-details');
+            container.classList.remove('visible'); // Hide the container
+        });
+
+    </script>
+
+{% if route_view %}
+<script>
+    const locations = [
+"25.15635,55.22701", // Example: 1st location
+"25.0657,55.17128", // 2nd location
+"25.124656953131783,55.2281645523589",   // 3rd location
+"25.276987,55.296249" // 4th location
+];
+
+showRoutes(locations);
+ </script>
+{% endif %}
 </body>
 
 </html>

@@ -50,6 +50,14 @@ def get_schedules(request, start_point_code, end_point_code):
     ]
     return JsonResponse(data, safe=False)
 
+def get_bus_stops(request):
+    # Fetch all bus stops from the database
+    bus_stops = BusStop.objects.all().values('name', 'lat', 'lng')
+    return JsonResponse(list(bus_stops), safe=False)
+
+
+def temp_route(request):
+    return render(request, 'index.html', {'route_view': True})
 def load_data(request):
     
     with open('only_end_loc.csv', 'r') as file:
@@ -117,3 +125,17 @@ def starting_config(request):
             obj.start = True
             obj.save()
     return HttpResponse("Starting points add successfully")
+
+def load_location_data(request):
+    with open('location_data.csv', 'r') as file:
+        reader = csv.reader(file)
+        next(reader)
+        for row in reader:
+            code = row[0]
+            lat = row[2]
+            lng = row[3]
+            obj = BusStop.objects.get(code=code)
+            obj.lat = lat
+            obj.lng = lng
+            obj.save()
+    return HttpResponse("Location data loaded.")

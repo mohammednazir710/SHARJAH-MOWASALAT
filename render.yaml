@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: "SHARJAH_MOWASALAT"
+    buildCommand: "./build.sh"
+    env: python
+    startCommand: "gunicorn SHARJAH_MOWASALAT.wsgi:application"
