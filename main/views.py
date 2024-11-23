@@ -56,8 +56,68 @@ def get_bus_stops(request):
     return JsonResponse(list(bus_stops), safe=False)
 
 
+from math import radians, sin, cos, sqrt, atan2
+
+def haversine(lat1, lon1, lat2, lon2):
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    R = 6371  # Earth's radius in kilometers
+    return R * c
+
+def find_nearest_bus_stop(lat, lng):
+    bus_stops = BusStop.objects.all()
+    nearest_stop = None
+    min_distance = float('inf')
+
+    for stop in bus_stops:
+        distance = haversine(lat, lng, float(stop.lat), float(stop.lng))
+        if distance < min_distance:
+            min_distance = distance
+            nearest_stop = stop
+
+    return nearest_stop
+
 def temp_route(request):
-    return render(request, 'index.html', {'route_view': True})
+    if request.method == "POST":
+        start_lat = float(request.POST.get('startLat'))
+        start_lng = float(request.POST.get('startLng'))
+        end_lat = float(request.POST.get('endLat'))
+        end_lng = float(request.POST.get('endLng'))
+
+        # Find nearest bus stops
+        
+        start_bus_stop = find_nearest_bus_stop(start_lat, start_lng)
+        end_bus_stop = find_nearest_bus_stop(end_lat, end_lng)
+
+        start_loc = f'{start_lat},{start_lng}'
+        end_loc = f'{end_lat},{end_lng}'
+        start_bus_loc = f'{start_bus_stop.lat},{start_bus_stop.lng}'
+        end_bus_loc = f'{end_bus_stop.lat},{end_bus_stop.lng}'
+
+
+        con = {
+            'route_view': True,
+            'start_loc': start_loc,
+            'end_loc': end_loc,
+            'start_bus_loc':start_bus_loc,
+            'end_bus_loc':end_bus_loc
+
+        }
+        print(con.values())
+    context = con if con else {}
+    return render(request, 'index.html', context)
+
+
+
+# ---------------------------------------------------------------------
+# ------------------------------ Load Data ----------------------------
+# ---------------------------------------------------------------------
 def load_data(request):
     
     with open('only_end_loc.csv', 'r') as file:

@@ -168,6 +168,8 @@ function showRoutes(locations) {
                     });
                     routeDetailsContainer.innerHTML += '</ol>'; // Close ordered list
                 }
+                routeDetailsContainer.innerHTML += `<hr>`;
+
             };
         })(i));
         

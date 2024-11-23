@@ -150,12 +150,16 @@
     </script>
 
 {% if route_view %}
+<input type="hidden" name="start_loc" id="start_loc" value="{{start_loc}}">
+<input type="hidden" name="start_bus_loc" id="start_bus_loc" value="{{start_bus_loc}}">
+<input type="hidden" name="end_bus_loc" id="end_bus_loc" value="{{end_bus_loc}}">
+<input type="hidden" name="end_loc" id="end_loc" value="{{end_loc}}">
 <script>
     const locations = [
-"25.15635,55.22701", // Example: 1st location
-"25.0657,55.17128", // 2nd location
-"25.124656953131783,55.2281645523589",   // 3rd location
-"25.276987,55.296249" // 4th location
+document.getElementById('start_loc').value, // Example: 1st location
+document.getElementById('start_bus_loc').value, // 2nd location
+document.getElementById('end_bus_loc').value,   // 3rd location
+document.getElementById('end_loc').value, // 4th location
 ];
 
 showRoutes(locations);

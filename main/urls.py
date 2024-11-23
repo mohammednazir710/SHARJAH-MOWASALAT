@@ -9,6 +9,6 @@ urlpatterns = [
     path('get-end-points/<str:start_code>/', views.get_end_points, name='get_end_points'),
     path('get-schedules/<str:start_point_code>/<str:end_point_code>/', views.get_schedules, name='get_schedules'),
     path('api/bus-stops/', views.get_bus_stops, name='get_bus_stops'),
-    path('temp_route_view', views.temp_route)
+    path('temp_route_view', views.temp_route, name="route_view")
 
 ]
