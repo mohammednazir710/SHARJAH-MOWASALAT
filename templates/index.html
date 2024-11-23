@@ -150,6 +150,9 @@
     </script>
 
 {% if route_view %}
+<button class="btn btn-secondary rounded-circle" type="button" id="show_route_back_btn" style="position: absolute; top: 20px; left: 50px; z-index: 999;" onclick="location.href=`/`">
+    <i class="fa fa-arrow-left"></i>
+</button>
 <input type="hidden" name="start_loc" id="start_loc" value="{{start_loc}}">
 <input type="hidden" name="start_bus_loc" id="start_bus_loc" value="{{start_bus_loc}}">
 <input type="hidden" name="end_bus_loc" id="end_bus_loc" value="{{end_bus_loc}}">
