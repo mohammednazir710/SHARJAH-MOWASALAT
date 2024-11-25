@@ -97,20 +97,20 @@
         <!-- Map header section -->
         <div class="map-header d-flex align-items-center">
             <a href="{% url 'index' %}" class="back-btn border rounded-circle px-2"><i
-                    class="fas fa-arrow-left"></i></a>
+                    class="fas fa-arrow-left text-primary"></i></a>
         </div>
 
         <!-- Bus Schedule Content -->
         <div class="container mt-5">
             <div class="schedule-content">
                 <!-- Title -->
-                <h5 class="schedule-title">Bus Schedules</h5>
+                <h5 class="schedule-title text-primary">Bus Schedules</h5>
 
                 <div class="search-results">
                     <!-- Starting Point -->
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-location-dot"></i></span>
+                            <span class="input-group-text"><i class="fas fa-location-dot text-primary"></i></span>
                         </div>
                         <select id="start-point" class="form-control form-select">
                             <option value="">Select Starting Point</option>
@@ -123,7 +123,7 @@
                     <!-- Destination -->
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt text-primary"></i></span>
                         </div>
                         <select id="end-point" class="form-control form-select" disabled>
                             <option value="">Select Destination</option>
@@ -133,7 +133,8 @@
 
                 <!-- Schedule Cards -->
                 <div id="schedule-container" style="display: none;">
-                    <div class="text-center font-weight-bold mb-3">Dep : Now</div>
+                    <div class="text-center font-weight-bold mb-3 text-primary">Find your bus route and timings here
+                    </div>
                     <div id="schedule-cards">
                         <!-- Schedule cards will be loaded here dynamically -->
                     </div>
@@ -168,8 +169,6 @@
 
 
 
-                <!-- Departure Time -->
-                <div class="text-center font-weight-bold mb-3">Dep : Now</div>
 
                 <!-- Schedule Cards -->
                 <!-- <div class="schedule-card">
@@ -365,12 +364,12 @@
                                 const card = `
     <div class="schedule-card">
         <div class="route-info">
-            <div class="left-icons">
+            <div class="left-icons text-primary">
                 <i class="fas fa-walking"></i>
                 <i class="fas fa-bus"></i>
             </div>
-            <span class="route badge badge-secondary">Route ${schedule.route}</span>
-            <div class="right-icons">
+            <span class="route badge badge-primary">Route ${schedule.route}</span>
+            <div class="right-icons text-primary">
                 <i class="fas fa-bus"></i>
                 <i class="fas fa-walking"></i>
             </div>

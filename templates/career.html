@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayer Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {% load static %}
+    <link rel="stylesheet" href="{% static 'extra/global.css' %}">
+    <style>
+        body{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <a href="{% url 'index' %}" class="btn btn-primary text-white"> <i class="bi bi-arrow-left"></i> Back to homepage</a>
+        <div class="inner_contents" bis_skin_checked="1">
+			<div class="locator" bis_skin_checked="1">
+				<br>
+				<h1>Careers</h1>
+				<p>KGL Passenger Transport Services is constantly looking for professional talent for all sectors of public transport.</p>
+				<p>You may send your application to careers@kgl.com</p>
+				
+			<div class="map" bis_skin_checked="1">
+				<br>
+				<div class="image" bis_skin_checked="1"><img src="{% static 'pic_career.jpg' %}" alt="" title=""></div>
+			</div>				
+			<div class="clearfloat" bis_skin_checked="1"></div>
+		</div>
+		<div class="operated_image" bis_skin_checked="1"><img src="images/operated.png" alt="" title=""></div>
+
+    </div>
+    
+</body>
+</html>
+
+
+
+

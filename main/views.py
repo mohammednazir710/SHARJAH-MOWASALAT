@@ -13,6 +13,15 @@ def index(request):
 def route(request):
     return render(request, 'route.html')
 
+def sayer(request):
+    return render(request, 'sayer.html')
+
+def career(request):
+    return render(request, 'career.html')
+
+def mission_and_vision(request):
+    return render(request, 'mission_and_vision.html')
+
 def schadule(request):
     starting_points = BusStop.objects.filter(start=True)
     return render(request, 'schadule.html', {'starting_points': starting_points})

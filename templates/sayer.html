@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayer Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {% load static %}
+    <link rel="stylesheet" href="{% static 'extra/global.css' %}">
+    <style>
+        body{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="items" bis_skin_checked="1">
+            <a href="{% url 'index' %}" class="btn btn-primary text-white"> <i class="bi bi-arrow-left"></i> Back to homepage</a>
+            
+            <div class="container" style="display: flex;width: 100%; justify-content: center;" bis_skin_checked="1">
+                <div class="image" style="padding: 20px;" bis_skin_checked="1">
+        
+                    <div style="align-content: center;" bis_skin_checked="1">
+                            <h1 style="text-align: center;">Sayer Discount Card</h1> 
+                            <p style="text-align: center;"> (25% Discount on Cash Ticket) </p>
+                    </div>
+        
+                    <img style="width:350px;border-radius:20px;" src="{% static 'sayer_card_2020.png' %}" alt="" title="">
+                </div>
+                <div class="image" style="padding: 20px;" bis_skin_checked="1">
+                    <div style="align-content: center;" bis_skin_checked="1">
+                            <h1 style="text-align: center;">Sayer Subscription Card</h1>
+                            <p style="text-align: center;">(Unlimited Travel for AED 225 valid for 30 days)</p>
+                    </div>
+                    <img style="width:350px;border-radius:20px;" src="{% static 'sayer_subscription_2020.png' %}" alt="" title="">
+                </div>
+            </div>
+        
+            <div class="locator" bis_skin_checked="1">
+                <!-- <h2 style="text-align: center; font-size: 20px;"><a href="http://www.mowasalat.ae/register/sayer_demo">REGISTER YOUR SAYER CARD NOW</a></h2> -->
+                <a href="http://mowasalat.ae/register/sayer_page" style="text-align: center;" bis_skin_checked="1"><h1>REGISTER YOUR SAYER CARD NOW</h1></a>
+                <br>
+                <h3>About Sayer Card</h3>
+                <p>
+                    Sayer card is a way to facilitate your travel around Sharjah. It enables the passengers to pay tickets
+                    electronically on Sharjah Public Transport buses. This technology can save your precious time whenever you
+                    travel by bus.
+                </p>
+                <br>
+                <h1 style="font-size: 18px;">Why Sayer card is a smarter way to travel</h1>
+                    <ul>
+                        <li>It's convenient</li>
+                        <li>Cash-free method of payment for travel</li>
+                        <li>Access buses easily by passing the card into the card reader</li>
+                    </ul>
+        
+                    <p>Present your SAYER card on a Ticket machine in Sharjah Public Transport bus. </p>
+                    <p>The trip amount will be deducted from your SAYER Card </p>
+                    <p>Please keep the SAYER ticket receipt till the end of journey for the inspection purpose. </p>
+                    <p>SAYER Ticket Receipt will have details of amount charged and balance amount available in your SAYER Card</p>
+                    <p>The time interval for issuing the second ticket is 15 minutes</p>
+        
+                <h1 style="font-size: 18px;">Sayer Cards Availability:</h1> 
+        
+                    <p>Sayer Cards are available on-board Sharjah Public Transport Buses by paying the driver.</p> 
+        
+                <h1 style="font-size: 18px;">Sales Options:</h1>
+        
+                    <p>Sayer Cards can be purchased and recharged in Sharjah Public Transport buses by asking the driver.</p> 
+        
+                <h1 style="font-size: 18px;">Sayer Discount Card:</h1>
+        
+                    <p>Passengers can purchase new SAYER Discount Cards from on-board Sharjah Public Transport
+                    buses with 2 denominations.</p>
+                    <p>AED 50 = will have a pre-charged amount of AED 45</p>
+                    <p>AED 95 = will have a pre-charged amount of AED 90</p>
+        
+                    <b style="font-size: 15px; color: #525254">Note: An initial Sayer Card purchase fee of AED 5 inclusive of 5% VAT which covers the cost of the card.</b>
+        
+                <h1 style="font-size: 18px;">Sayer Subscription Card:</h1>
+        
+                <p>Passengers can purchase new <b> SAYER Subscription Cards </b> from on-board Sharjah Public Transport buses</p>
+        
+                <p> AED 225 = Unlimited Travel valid for 30 Days</p>
+        
+                <b style="font-size: 15px; color: #525254">Note: An initial additional Sayer Card purchase fee of AED 5  inclusive of 5% VAT which covers the cost of the card.</b>
+        
+                <h1 style="font-size: 18px;">How to Top-up Sayer Cards in the Bus?</h1>
+        
+                    <!-- <ul style="list-style: none;"> -->
+                        <p>1. Board any Sharjah Public Transport bus and ask the driver for SAYER Discount Card or SAYER Subscription Card top-up</p>
+                        <p>2. Inform the amount to the driver to top-up.							</p>
+        
+                            <p> <b style="font-size: 15px; color: #525254"> a. Sayer Discount Card: </b>
+                                    </p><p>AED 45</p>
+                                    <p>AED 90</p>
+                            <p></p>
+                            <p>
+                                <b style="font-size: 15px; color: #525254"> b. Sayer Subscription Card: </b>
+                                </p><p> AED 225 (valid for 30 days)</p>
+                            <p></p>
+                    <p>3. Take the SAYER Card together with the purchase receipt.</p>
+                    <p>4. The purchase receipt will show the previous balance plus the amount added to your SAYER Card.</p>
+                    <!-- </ul> -->
+        
+        
+                <h1 style="font-size: 18px;">Sayer Cards Registration</h1>
+                    <b style="font-size: 15px; color: #525254">Benefits of Registering SAYER Cards</b>
+                    <p>The registered SAYER Cards can be hot-listed, an important safeguard should it be lost, stolen or damaged. Hot-listing
+                    disables the SAYER Cards from further use and enables the value on the lost, stolen or damaged SAYER Cards to be
+                    transferred to a replacement SAYER Cards.</p>
+                    <p>Once a SAYER Card has been registered to a person, it cannot be re-registered in another person’s name.</p>
+                    <b style="font-size: 15px; color: #525254">Note: Unregistered SAYER Cards will not be eligible for replacement and balance transfer.</b>
+        
+                    <h1 style="font-size: 18px;">Cash &amp; Sayer Ticket price</h1>
+        
+        
+                    <div class="item" style="width: 100%; margin-left: -13px" bis_skin_checked="1">
+                        <table style="margin: 10px; border: none; border-color: white;">
+                              <tbody><tr>
+                                <td>CASH TICKET</td>
+                                <td>AED 8.00</td>
+                              </tr>
+                              <tr>
+                                  <td colspan="2">SAYER DISCOUNT CARD</td>
+                              </tr>
+                              <tr>
+                                  <td>Sayer Ticket</td>
+                                  <td>SAYER DISCOUNT CARD</td>
+                              </tr>
+                              <tr>
+                                  <td>Sayer Ticket</td>
+                                  <td>AED 6.00</td>
+                              </tr>
+                              <tr>
+                                  <td>Card Recharge Options </td>
+                                  <td>AED 45 &amp; AED 90</td>
+                              </tr>
+                              <tr>
+                                  <td>Card Price</td>
+                                  <td>One Time payment of AED 5.00 inclusive of 5% VAT for the new card cost</td>
+                              </tr>
+                              <tr>
+                                  <td>Rechargeable</td>
+                                  <td>Yes</td>
+                              </tr>
+                              <tr>
+                                  <td>Validity</td>
+                                  <td>5 Years</td>
+                              </tr>
+                        </tbody></table>
+                    </div>
+        
+                    <div class="item" style="width: 100%; margin-left: -13px" bis_skin_checked="1">
+                        <table style="margin: 10px; border: none;border-color: white;">
+                            <tbody><tr>
+                                <td colspan="2">SAYER SUBSCRIPTION CARD</td>
+                            </tr>
+                            <tr>
+                                <td>Sayer Subscription Ticket</td>
+                                <td>Unlimited Travel with Sayer Subscription Ticket</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly Recharge (30 Days)</td>
+                                <td>AED 225</td>
+                            </tr>
+                            <tr>
+                                <td>Card Price</td>
+                                <td>One Time payment of AED 5.00 inclusive of 5% VAT for the new card cost</td>
+                            </tr>
+                            <tr>
+                                <td>Rechargeable</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Validity</td>
+                                <td>5 Years</td>
+                            </tr>
+                        </tbody></table>
+                    </div>
+                
+        
+                <h1>Frequently Asked Questions</h1>
+        
+                        <b style="font-size: 15px; color: #525254">What is the difference between SAYER cards and normal tickets?</b>
+                        <p>The difference between SAYER Cards and normal tickets is that SAYER Cards are reloadable/rechargeable, easy
+                        access on the bus, saves your precious time while the paper ticket, trip has to be paid to the bus driver in cash
+                        which is cheaper than Cash ticket.</p>
+                        <b style="font-size: 15px; color: #525254">How can I check the remaining balance and validity of my SAYER cards?</b>
+                        <p>The balance and validity of your SAYER Cards are shown in your SAYER ticket issued by the bus driver every
+                        time you travel with Sharjah Public Transport Buses.</p>
+                        <b style="font-size: 15px; color: #525254">What can I do if SAYER card lost or stolen?</b>
+                        <p>Immediately call the customer service hotline at 600522282 by reporting your card serial number and our
+                            agent will disable the card within 48 hours. Only registered Sayer Card can be hot-listed</p>
+                        <b style="font-size: 15px; color: #525254">How should I look after my SAYER card?</b>
+                        <p>Keep your card in its wallet, separate it from other credit / debit cards and don't bend the card.</p>
+        
+                    <br>
+                    <a href="http://www.mowasalat.ae/images/syer-subscription.JPG" style="text-align: center;" bis_skin_checked="1"><h1>DOWNLOAD THE SAYER CARDS BROCHURE</h1></a>
+        
+            </div>
+        
+        </div>
+    </div>
+    
+</body>
+</html>
+
+
+
+

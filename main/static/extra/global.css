@@ -1,0 +1,589 @@
+/* global */
+body {
+    background-color: #9b9ca0;
+    background-image: url(../images/bg.jpg);
+    background-repeat: repeat-x;
+    margin: 0px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    font-size: 11px;
+}
+
+a,
+a:link,
+a:visited {
+    color: #000;
+    font-size: 11px;
+    text-decoration: none;
+    position: relative;
+}
+
+a:hover {
+    color: #000;
+    position: relative;
+}
+
+span a:hover {
+    color: #000;
+    position: relative;
+    text-decoration: underline;
+}
+
+img {
+    border: 0;
+}
+
+.clearfloat {
+    clear: both;
+}
+
+label {
+    padding: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #005AAB;
+}
+
+h1 {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 18px;
+}
+
+h2 {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 18px;
+}
+
+h3 {
+    padding: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #F15C22;
+}
+
+h5 {
+    padding: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #005AAB;
+}
+
+.fleet1 {
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: #F15C22;
+}
+
+.fltrt {
+    float: right;
+}
+
+p {
+    color: #525254;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    font-size: 13px;
+}
+
+table {
+    border-right: 1px solid #525254;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #525254;
+}
+
+table tr {
+    font-size: 11px;
+    height: 19px;
+    color: #525254
+}
+
+table td {
+    border-left: 1px solid #525254;
+    border-top: 1px solid #525254;
+}
+
+
+
+div.container div.wrapper {
+    width: 1024px;
+    margin: 0 auto 0 auto;
+}
+
+
+
+div.container div.wrapper div.logo_index {
+    text-align: center;
+    height: 260px;
+}
+
+
+
+div.container div.wrapper div.lang {
+    padding-left: 300px;
+    z-index: 999;
+    margin-top: -30px;
+    position: absolute;
+}
+
+/*div.container div.wrapper div.menu { padding-left: 60px; }*/
+div.container div.wrapper div.menu ul {
+    list-style-type: none;
+    padding-left: 73px;
+}
+
+div.container div.wrapper div.menu li {
+    display: inline;
+    padding-right: 1px;
+    float: left;
+}
+
+div.container div.wrapper div.menu li.text {
+    padding-top: 5px;
+}
+
+
+
+/*div.container div.wrapper div.menu li a { color: #0055a8; font-family: "Trebuchet MS",Garamond,Tahoma; font-size: 15px; font-weight: bold; }
+div.container div.wrapper div.menu li a:hover { color: #ffffff; }*/
+div.container div.wrapper div.menu li.link a,
+div.container div.wrapper div.menu li.routes a {
+    color: #4C4D3B;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+div.container div.wrapper div.menu li.link a:hover,
+div.container div.wrapper div.menu li.routes a:hover {
+    color: #ffffff !important;
+}
+
+div.container div.wrapper div.menu li.current {
+    padding-top: 13px;
+    width: 116px;
+    height: 46px;
+    background-image: url(../images/nav-bghover.jpg);
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+div.container div.wrapper div.menu li.current span.nc {
+    color: #ffffff;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+div.container div.wrapper div.menu li.link {
+    padding-top: 13px;
+    width: 116px;
+    height: 46px;
+    background-image: url(../images/nav-bg.jpg);
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+div.container div.wrapper div.menu li.routes {
+    padding-top: 13px;
+    width: 155px;
+    height: 46px;
+    background-image: url(../images/nav-bgbig.jpg);
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+div.container div.wrapper div.menu li.r-current {
+    color: #ffffff;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 13px;
+    width: 155px;
+    height: 46px;
+    background-image: url(../images/nav-bgbighover.jpg);
+    background-repeat: no-repeat;
+    text-align: center;
+}
+
+div.container div.wrapper div.inner_contents {
+    min-height: 520px;
+}
+
+div.container div.wrapper div.inner_contents div.locator {
+    padding-left: 100px;
+    width: 400px;
+    float: left;
+}
+
+div.container div.wrapper div.inner_contents div.locator h1 {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 18px;
+}
+
+div.container div.wrapper div.inner_contents div.locator p {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #525254;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.locator select {
+    width: 300px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 15px;
+}
+
+div.container div.wrapper div.inner_contents div.locator input.btn {
+    width: 50px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+div.container div.wrapper div.inner_contents div.locator a {
+    color: #005aab;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+div.container div.wrapper div.inner_contents div.locator table p a {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #525254;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.locator div.form label,
+input,
+textarea {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #000;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.locator div.form input.btn {
+    width: 100px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+div.container div.wrapper div.inner_contents div.locator div.form select {
+    width: 60px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.wide {
+    padding-left: 100px;
+    width: 800px;
+    float: left;
+}
+
+div.container div.wrapper div.inner_contents div.wide h1 {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 18px;
+}
+
+div.container div.wrapper div.inner_contents div.wide p {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #525254;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.wide select {
+    width: 300px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 15px;
+}
+
+div.container div.wrapper div.inner_contents div.wide input.btn {
+    width: 50px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+div.container div.wrapper div.inner_contents div.wide a {
+    color: #005aab;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+div.container div.wrapper div.inner_contents div.abouts {
+    padding-left: 100px;
+    width: 250px;
+    float: left;
+}
+
+div.container div.wrapper div.inner_contents div.abouts h1 {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 18px;
+}
+
+div.container div.wrapper div.inner_contents div.abouts p {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #525254;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.teasers {
+    float: left;
+    width: 597px;
+    padding: 22px 0 0 32px;
+}
+
+div.container div.wrapper div.inner_contents div.teasers .title {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #e96f35;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+div.container div.wrapper div.inner_contents div.teasers .short_desc {
+    color: #4c4d3b;
+    font-size: 12px;
+    padding-left: 6px;
+}
+
+div.container div.wrapper div.inner_contents div.teasers .nav {
+    color: #e96f35;
+    font-size: 11px;
+}
+
+div.container div.wrapper div.inner_contents div.map {
+    float: right;
+    width: 510px;
+}
+
+div.container div.wrapper div.inner_contents div.map div.image {
+    padding: 20px 0 0 20px;
+    /*width: 370px;*/
+}
+
+div.container div.wrapper div.inner_contents div.map div.image label,
+input,
+textarea {
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 13px;
+}
+
+div.container div.wrapper div.inner_contents div.map div.image input.btn {
+    width: 100px;
+    font-family: "Trebuchet MS", Garamond, Tahoma;
+    color: #787a80;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 2px;
+}
+
+div.container div.wrapper div.inner_contents div.map div.image img.thumb {
+    border: 1px solid #9b9ca0;
+    padding: 1px;
+}
+
+div.container div.wrapper div.inner_contents div.map div.image h1 {
+    padding: 0;
+    margin: 0;
+}
+
+/* mid */
+div.container div.wrapper div.operated {
+    padding-right: 44px;
+    height: 60px;
+}
+
+div.container div.wrapper div.operated div.contents {
+    width: 940px;
+    text-align: right;
+    color: #fafafa;
+    padding: 10px;
+}
+
+div.container div.wrapper div.operated_image {
+    text-align: right;
+    padding-right: 40px;
+    padding-top: 47px;
+}
+
+/* footer */
+div.container div.wrapper div.footer {
+    padding-left: 44px;
+    border-top: 1px dashed #0c62af;
+}
+
+div.container div.wrapper div.footer div.contents {
+    width: 940px;
+    height: 40px;
+    text-align: center;
+    color: #000;
+    padding-top: 15px;
+}
+
+div.container div.wrapper div.footer div.contents a {
+    color: #000;
+}
+
+div.container div.wrapper div.footer div.contents a:hover {
+    color: #000;
+    border-bottom: 1px dotted #000;
+}
+
+/* map */
+#jmap {
+    background: #f0f8ff;
+    display: none;
+    margin: 0;
+    padding: 0.63em;
+}
+
+#jmap li {
+    display: block;
+    list-style: none;
+    padding: 0.13em;
+}
+
+#jmap li a {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+#jmapButton {
+    background: #77c0ff;
+    cursor: pointer;
+    font-weight: 700;
+    margin: 0;
+    padding: 0.63em;
+    text-align: right;
+}
+
+#gif {
+    background-image: url(../images/loading.gif);
+    background-repeat: no-repeat;
+    left: 192px;
+    position: relative;
+    top: 190px;
+    z-index: 999;
+}
+
+#loading {
+    left: 185px;
+    position: relative;
+    top: 200px;
+    z-index: 999;
+}
+
+#loaded {
+    left: 5px;
+    position: relative;
+    top: 5px;
+}
+
+/* tooltip */
+.ajaxtooltip {
+    position: absolute;
+    /*leave this alone*/
+    display: none;
+    /*leave this alone*/
+    width: 300px;
+    left: 0;
+    /*leave this alone*/
+    top: 0;
+    /*leave this alone*/
+    background: lightyellow;
+    border: 2px solid gray;
+    border-width: 1px 2px 2px 1px;
+    padding: 5px;
+}
+
+/*---Flash Banne---*/
+#f-banner {
+    width: 249px;
+    height: 295px;
+}
+
+/*---Slider---*/
+.controls {
+    background-image: url("../images/blue.jpg");
+    background-position: right center;
+    background-repeat: repeat-y;
+    color: #005AAB;
+    margin-top: 20px;
+    padding-bottom: 6px;
+    padding-right: 20px;
+    text-align: right;
+    width: 210px;
+}
+
+.controls ul {
+    list-style: none outside none;
+    margin: 0;
+    padding-left: 0;
+}
+
+.controls li {
+    display: block;
+    padding-top: 8px;
+}
+
+.controls li a {
+
+    text-decoration: none;
+}
+
+.controls ul .selected a {
+    color: #E96F35 !important;
+}
+
+
+.controls li a:hover {
+    color: #E96F35 !important;
+    padding-right: 1px;
+    text-decoration: none;
+}
+
+div.map div#HeadTitle p a {
+    font-size: 13px !important;
+}
+
+div.map div#HeadTitle p a:hover {
+    text-decoration: underline;
+}
+
+/*--Contact Us---*/
+h4 {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+.blink {
+    animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+div.container div.wrapper div.menu li.current.mcard {
+    background: url(../images/nav-mowacard.jpg) no-repeat;
+}
+
+div.container div.wrapper div.menu ul {
+    padding-left: 0;
+    width: 1400px;
+}

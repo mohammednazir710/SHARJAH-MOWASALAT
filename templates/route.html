@@ -9,12 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        .container {
-            max-width: 400px;
-            margin: auto;
-            padding-top: 20px;
-        }
-
         .header {
             display: flex;
             align-items: center;
@@ -60,7 +54,7 @@
 
 <body>
 
-    <div class="container">
+    <div class="container my-5">
         <div class="header">
             <a href="{% url 'index' %}"><i class="fas fa-arrow-left"></i></a>
             <h5>Find Route</h5>
@@ -74,10 +68,14 @@
         </div>
 
         <!-- Leave now and travel options buttons -->
-        <form action="{% url 'route_view' %}" method="post">
+        <form action="{% url 'route_view' %}" method="post" id="route_form">
             {% csrf_token %}
             <div class="d-flex justify-content-between mb-3">
-                <button class="btn btn-outline-primary btn-block" type="submit" style="margin-right: 5px;">
+                <input type="hidden" id="startLat" name="startLat">
+                <input type="hidden" id="startLng" name="startLng">
+                <input type="hidden" id="endLat" name="endLat">
+                <input type="hidden" id="endLng" name="endLng">
+                <button class="btn btn-outline-primary btn-block" type="button" onclick="find_route()" style="margin-right: 5px;">
                     <i class="fas fa-clock"></i> Leave now
                 </button>
                 <div class="d-flex gap-2">
@@ -88,11 +86,19 @@
                         <i class="fas fa-bus"></i>
                     </button>
                 </div>
-                <input type="hidden" id="startLat" name="startLat">
-                <input type="hidden" id="startLng" name="startLng">
-                <input type="hidden" id="endLat" name="endLat">
-                <input type="hidden" id="endLng" name="endLng">
-
+                
+                <script>
+                    function find_route(){
+                        let route_form = document.getElementById('route_form')
+                        let  field1 = document.getElementById('startLocation')
+                        let  field2 = document.getElementById('endLocation')
+                        console.log(field1.value, field2.value)
+                        if (field1.value && field2.value){
+                            route_form.submit()
+                        }
+                        
+                    }
+                </script>
             </div>
         </form>
         <!-- Recommended routes -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayer Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  {% load static %}
+    <link rel="stylesheet" href="{% static 'extra/global.css' %}">
+    <style>
+        body{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <a href="{% url 'index' %}" class="btn btn-primary text-white"> <i class="bi bi-arrow-left"></i> Back to homepage</a>
+        <div class="inner_contents row" bis_skin_checked="1">
+			<div class="locator col-md-6" bis_skin_checked="1">
+				<br>
+				<h1>Our Vision</h1>
+				<p>A reliable and affordable transport system for all.</p>
+				<h1>Our Mission</h1>
+				<p>
+					It is our mission to be the first choice in mobility solution, by providing all riders with a memorable travel 
+					experience achieved by delivering safe, on-time and cost-effective journeys.					
+				</p>
+				<h1>Our Values</h1>
+				<p>
+				In our aim to attain our vision and mission to the full effect, we derive our operational provisions solely and 
+				always from the following values.
+				<br><br>
+				<strong>Our Path of Quality</strong> <br>
+				- We provide a safe and reliable infrastructure <br>
+				- We work together to create great solutions <br>
+				- We strive for customer satisfaction at all times <br>
+				- We are committed to our community
+				<br><br>
+				<strong>Our Integrity and Leadership</strong> <br>
+				- We treat others with respect <br>
+				- We are open and honest in our communication <br>
+				- We believe in teamwork <br>
+				- We embrace responsibility and innovative ideas				
+				</p>
+			</div>
+			<div class="map col-md-6" bis_skin_checked="1">
+				<br>
+				<div class="image" bis_skin_checked="1"><img src="{% static 'pic_vision.jpg' %}" alt="" title=""></div>
+			</div>				
+		
+		</div>
+    </div>
+    
+</body>
+</html>
+
+
+
+
