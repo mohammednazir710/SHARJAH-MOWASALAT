@@ -71,6 +71,8 @@
         <form action="{% url 'route_view' %}" method="post" id="route_form">
             {% csrf_token %}
             <div class="d-flex justify-content-between mb-3">
+                <input type="hidden" id="startLocName" name="startLocName">
+                <input type="hidden" id="endLocName" name="endLocName">
                 <input type="hidden" id="startLat" name="startLat">
                 <input type="hidden" id="startLng" name="startLng">
                 <input type="hidden" id="endLat" name="endLat">
@@ -92,6 +94,8 @@
                         let route_form = document.getElementById('route_form')
                         let  field1 = document.getElementById('startLocation')
                         let  field2 = document.getElementById('endLocation')
+                        document.getElementById('startLocName').value=field1.value
+                        document.getElementById('endLocName').value=field2.value
                         console.log(field1.value, field2.value)
                         if (field1.value && field2.value){
                             route_form.submit()
@@ -104,46 +108,19 @@
         <!-- Recommended routes -->
         <div class="recommended-list">
             <h6>Recommended</h6>
+            {% for item in history %}
             <div class="recommended-item">
                 <div class="location-info">
                     <i class="fas fa-map-marker-alt"></i>
                     <div>
-                        <p class="mb-0">Rolla Mall</p>
-                        <small>Al Arouba Street - Sharjah</small>
+                        <p class="mb-0">{{item.start_loc_name}}</p>
+                        <small>{{item.end_loc_name}}</small>
                     </div>
                 </div>
-                <p>10.2KM</p>
+                <p>{{item.distance|floatformat:2}}KM</p>
             </div>
-            <div class="recommended-item">
-                <div class="location-info">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <p class="mb-0">Al Nahda Park Sharjah</p>
-                        <small>Sharjah</small>
-                    </div>
-                </div>
-                <p>600M</p>
-            </div>
-            <div class="recommended-item">
-                <div class="location-info">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <p class="mb-0">City Centre Sharjah</p>
-                        <small>Al Wahda St - Sharjah</small>
-                    </div>
-                </div>
-                <p>6.7KM</p>
-            </div>
-            <div class="recommended-item">
-                <div class="location-info">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <p class="mb-0">Bus Stop</p>
-                        <small>Muwaileh Commercial, Sharjah</small>
-                    </div>
-                </div>
-                <p>7.5KM</p>
-            </div>
+            {% endfor %}
+            
         </div>
 
         <div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel"

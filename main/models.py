@@ -26,3 +26,13 @@ class BusSchedule(models.Model):
 
     def __str__(self):
         return f"{self.end_stop}"
+
+class History(models.Model):
+    key = models.CharField(max_length=100, blank=True, null=True)
+    start = models.CharField(max_length=50, blank=True, null=True)
+    end = models.CharField(max_length=50, blank=True, null=True)
+    start_loc_name= models.CharField(max_length=255, blank=True, null=True)
+    end_loc_name= models.CharField(max_length=255, blank=True, null=True)
+    distance = models.FloatField(default=1)
+
+    created_at = models.DateTimeField(auto_now_add=True)

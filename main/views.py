@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import BusStop
-from main.models import BusStop, EndStop, BusSchedule
+from main.models import BusStop, EndStop, BusSchedule, History
 import csv, json
 from datetime import time
 
@@ -11,7 +11,8 @@ def index(request):
     return render(request, 'index.html')
 
 def route(request):
-    return render(request, 'route.html')
+    history = History.objects.filter(key=request.session.session_key)
+    return render(request, 'route.html', {'history': history})
 
 def sayer(request):
     return render(request, 'sayer.html')
@@ -99,6 +100,9 @@ def temp_route(request):
         end_lat = float(request.POST.get('endLat'))
         end_lng = float(request.POST.get('endLng'))
 
+        start_loc_name = request.POST.get('startLocName')
+        end_loc_name = request.POST.get('endLocName')
+
         # Find nearest bus stops
         
         start_bus_stop = find_nearest_bus_stop(start_lat, start_lng)
@@ -108,6 +112,23 @@ def temp_route(request):
         end_loc = f'{end_lat},{end_lng}'
         start_bus_loc = f'{start_bus_stop.lat},{start_bus_stop.lng}'
         end_bus_loc = f'{end_bus_stop.lat},{end_bus_stop.lng}'
+
+        # Get the current session key
+        session_key = request.session.session_key
+        
+        # If session hasn't been created yet, force it to create
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+        distance = haversine(start_lat, start_lng, end_lat, end_lng)
+        History.objects.create(
+            key=session_key,
+            start=start_loc,
+            end=end_loc,
+            start_loc_name=start_loc_name,
+            end_loc_name=end_loc_name,
+            distance=distance
+        )
 
 
         con = {

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BusStop, EndStop, BusSchedule
+from .models import BusStop, EndStop, BusSchedule, History
 # Register your models here.
 @admin.register(BusStop)
 class BusStopAdmin(admin.ModelAdmin):
@@ -7,3 +7,4 @@ class BusStopAdmin(admin.ModelAdmin):
 
 admin.site.register(EndStop)
 admin.site.register(BusSchedule)
+admin.site.register(History)
