@@ -30,6 +30,12 @@ def schadule(request):
 def test(request):
     return render(request, 'test.html')
 
+def delete_history(request):
+    if request.session.session_key:
+        History.objects.filter(key=request.session.session_key).delete()
+    return redirect(request.META.get('HTTP_REFERER', '/fallback-url'))
+
+
 def get_end_points(request, start_code):
     # Find the starting bus stop
     start_stop = BusStop.objects.filter(code=start_code).first()

@@ -77,37 +77,54 @@
                 <input type="hidden" id="startLng" name="startLng">
                 <input type="hidden" id="endLat" name="endLat">
                 <input type="hidden" id="endLng" name="endLng">
-                <button class="btn btn-outline-primary btn-block" type="button" onclick="find_route()" style="margin-right: 5px;">
+                <button class="btn btn-outline-primary btn-block" type="button" onclick="find_route()"
+                    style="margin-right: 5px;">
                     <i class="fas fa-clock"></i> Leave now
                 </button>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary">
+                    <button type="button" class="btn btn-outline-secondary mx-2" onclick="find_route()">
                         <i class="fas fa-walking"></i>
                     </button>
-                    <button class="btn btn-outline-secondary">
+                    <button type="button" class="btn btn-outline-secondary" onclick="find_route()">
                         <i class="fas fa-bus"></i>
                     </button>
                 </div>
-                
+
                 <script>
-                    function find_route(){
+                    function showComingSoonModal() {
+                        const modalElement = document.getElementById('comingSoonModal');
+                        const bootstrapModal = new bootstrap.Modal(modalElement);
+
+                        // Show the modal
+                        bootstrapModal.show();
+
+                        // Hide the modal after 3 seconds
+                        setTimeout(() => {
+                            bootstrapModal.hide();
+                        }, 3000);
+                    }
+                    function find_route() {
                         let route_form = document.getElementById('route_form')
-                        let  field1 = document.getElementById('startLocation')
-                        let  field2 = document.getElementById('endLocation')
-                        document.getElementById('startLocName').value=field1.value
-                        document.getElementById('endLocName').value=field2.value
+                        let field1 = document.getElementById('startLocation')
+                        let field2 = document.getElementById('endLocation')
+                        document.getElementById('startLocName').value = field1.value
+                        document.getElementById('endLocName').value = field2.value
                         console.log(field1.value, field2.value)
-                        if (field1.value && field2.value){
+                        if (field1.value && field2.value) {
                             route_form.submit()
+                        } else {
+                            showComingSoonModal()
                         }
-                        
+
                     }
                 </script>
             </div>
         </form>
         <!-- Recommended routes -->
         <div class="recommended-list">
-            <h6>Recommended</h6>
+            <div class="row justify-content-between"><h6 class="col-6">Recommended</h6>
+            <div class="col-6"><a href="{% url 'clear_history' %}" class="float-right">Clear history</a></div></div>
+            
             {% for item in history %}
             <div class="recommended-item">
                 <div class="location-info">
@@ -120,9 +137,17 @@
                 <p>{{item.distance|floatformat:2}}KM</p>
             </div>
             {% endfor %}
-            
-        </div>
 
+        </div>
+        <div class="modal fade custom-modal" id="comingSoonModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        Please select the location first
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="locationModal" tabindex="-1" role="dialog" aria-labelledby="locationModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
