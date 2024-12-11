@@ -55,12 +55,13 @@ def get_schedules(request, start_point_code, end_point_code):
         end_stop__stop__code=end_point_code, 
         end_stop__from_stop__code=start_point_code
         )
+    
     data = [
         {
-            "route": schedule.end_stop.stop.code,
+            "route": schedule.end_stop.route_number if schedule.end_stop.route_number else schedule.end_stop.stop.code,
             "dispatch": schedule.dispatch.strftime('%I:%M %p'),
             "arrival": schedule.arrival.strftime('%I:%M %p'),
-            "fare": "AED 4.50 - 6.00",  # Adjust fare logic if needed
+            "fare": "AED 6.00 - 8.00",  # Adjust fare logic if needed
         }
         for schedule in schedules
     ]

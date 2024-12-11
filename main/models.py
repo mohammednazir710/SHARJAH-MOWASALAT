@@ -15,6 +15,7 @@ class BusStop(models.Model):
 class EndStop(models.Model):
     from_stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name='from_stop')
     stop = models.ForeignKey(BusStop, on_delete=models.CASCADE, related_name="end_stop")
+    route_number = models.CharField(max_length=10, null=True, blank=True)
     
     def __str__(self):
         return f"{self.from_stop.code} to {self.stop.code}"
