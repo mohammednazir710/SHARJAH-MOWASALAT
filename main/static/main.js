@@ -8,16 +8,25 @@ var uaeBounds = L.latLngBounds(
 // Initialize the map with Sharjah as the center and a closer default zoom level
 var map = L.map('map', {
     center: [25.3460, 55.4209], // Centered on Sharjah
-    zoom: 14,
+    zoom: 15,
     maxBounds: uaeBounds,
     minZoom: 6
 });
 
 // Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
+    maxZoom: 25,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+fetch('static/export.geojson')
+  .then(response => response.json())
+  .then(geoJsonData => {
+    L.geoJSON(geoJsonData).addTo(map);
+  })
+  .catch(error => {
+    console.log('Error loading GeoJSON data:', error);
+  });
 
 // Initialize variables
 var locationMarker;
