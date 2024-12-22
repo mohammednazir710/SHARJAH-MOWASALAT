@@ -178,7 +178,7 @@
                         if (data.length > 0) {
                             data.forEach(location => {
                                 const option = document.createElement('option');
-                                option.value = location.code;
+                                option.value = location.id;
                                 option.textContent = location.name;
                                 endPointSelect.appendChild(option);
                             });

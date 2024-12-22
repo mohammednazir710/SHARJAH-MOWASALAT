@@ -191,7 +191,7 @@ function showRoutes(locations) {
 
 // Bus stops data (example locations)
 // Fetch bus stop data from the server
-fetch('/api/bus-stops/')
+fetch('/bus-stops/')
     .then(response => response.json())
     .then(busStops => {
         // Define a custom bus icon
@@ -204,7 +204,7 @@ fetch('/api/bus-stops/')
 
         // Add markers for each bus stop
         busStops.forEach(function (stop) {
-            L.marker([stop.lat, stop.lng], { icon: busIcon })
+            L.marker([stop.latitude, stop.longitude], { icon: busIcon })
                 .bindPopup(`<strong>${stop.name}</strong>`) // Display the bus stop name in a popup
                 .addTo(map);
         });

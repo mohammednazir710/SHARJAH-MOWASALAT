@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-# from .models import BusStop
 from main.models import BusStop, BusSchedule, History, Route, RouteStop
 # import csv, json
 # from datetime import time
-
+from django.db.models import Q
+from datetime import datetime, timedelta
+import math
 # Create your views here.
 
 def index(request):
@@ -36,9 +37,6 @@ def delete_history(request):
     return redirect(request.META.get('HTTP_REFERER', '/fallback-url'))
 
 
-from django.http import JsonResponse
-from django.db.models import Q
-
 def get_end_points(request, start_id):
     # Find the starting bus stop
     start_stop = BusStop.objects.filter(id=start_id).first()
@@ -63,27 +61,43 @@ def get_end_points(request, start_id):
     return JsonResponse(data, safe=False)
 
 
-# def get_schedules(request, start_point_code, end_point_code):
-#     schedules = BusSchedule.objects.filter(
-#         end_stop__stop__code=end_point_code, 
-#         end_stop__from_stop__code=start_point_code
-#         )
+def get_schedules(request, start_point_id, end_point_id):
     
-#     data = [
-#         {
-#             "route": schedule.end_stop.route_number if schedule.end_stop.route_number else schedule.end_stop.stop.code,
-#             "dispatch": schedule.dispatch.strftime('%I:%M %p'),
-#             "arrival": schedule.arrival.strftime('%I:%M %p'),
-#             "fare": "AED 6.00 - 8.00",  # Adjust fare logic if needed
-#         }
-#         for schedule in schedules
-#     ]
-#     return JsonResponse(data, safe=False)
+    start_routes = RouteStop.objects.filter(stop_id=start_point_id).values_list('route_id', flat=True)
+    end_routes = RouteStop.objects.filter(stop_id=end_point_id).values_list('route_id', flat=True)
+    common_route = Route.objects.filter(id__in=set(start_routes).intersection(end_routes)).first()
+    start_point_order = RouteStop.objects.get(stop_id=start_point_id, route=common_route).order
+    end_point_order = RouteStop.objects.get(stop_id=end_point_id, route=common_route).order
+    print(start_point_order, end_point_order, common_route.total_stops())
+    total_time = 46
+    total_stops = common_route.total_stops()
+    timeaddition = total_time/(total_stops-1)
+    if start_point_order==1 and end_point_order==total_stops:
+        timeaddition = 0
+    add_with_dispatch = math.ceil(timeaddition*(start_point_order-1)) if timeaddition != 0 else 0
+    minus_from_arraival = math.floor(timeaddition*(total_stops-end_point_order)) if timeaddition != 0 else 0
+    schedules = BusSchedule.objects.filter(
+        route=common_route
+        )
+    print("Timeaddition: ",timeaddition)
+    print("Add with dispatch: ", add_with_dispatch)
+    print("Minus with dispatch: ", minus_from_arraival)
+    data = [
+        {
+            "route": common_route.name,
+            "dispatch": (datetime.combine(datetime.today(), schedule.dispatch_time) + timedelta(minutes=add_with_dispatch)).time().strftime('%I:%M %p'),
+            "arrival": (datetime.combine(datetime.today(), schedule.arrival_time) - timedelta(minutes=minus_from_arraival)).time().strftime('%I:%M %p'),
+            "fare": "AED 6.00 - 8.00",  # Adjust fare logic if needed
+        }
+        for schedule in schedules
+    ]
 
-# def get_bus_stops(request):
-#     # Fetch all bus stops from the database
-#     bus_stops = BusStop.objects.all().values('name', 'lat', 'lng')
-#     return JsonResponse(list(bus_stops), safe=False)
+    return JsonResponse(data, safe=False)
+
+def get_bus_stops(request):
+    # Fetch all bus stops from the database
+    bus_stops = BusStop.objects.all().values('name', 'latitude', 'longitude')
+    return JsonResponse(list(bus_stops), safe=False)
 
 
 # from math import radians, sin, cos, sqrt, atan2
@@ -168,84 +182,18 @@ def get_end_points(request, start_id):
 # ---------------------------------------------------------------------
 # ------------------------------ Load Data ----------------------------
 # ---------------------------------------------------------------------
-# def load_data(request):
+import csv
+def load_data(request):
     
-#     with open('only_end_loc.csv', 'r') as file:
-#         reader = csv.reader(file)
-#         fields = next(reader)
-#         for stop in reader:
-#             BusStop.objects.create(
-#                 name = stop[1],
-#                 code = stop[0]
-#             )
-#     return HttpResponse("Data loaded successful")
+    with open('data.csv', 'r') as file:
+        reader = csv.reader(file)
+        fields = next(reader)
+        route_ = Route.objects.get(name="99")
+        for stop in reader:
+            BusSchedule.objects.create(
+                route=route_,
+                dispatch_time=stop[0],
+                arrival_time=stop[1]
+            )
+    return HttpResponse("Data loaded successful")
 
-# def get_time_obj(time_string):
-#     hours, minutes = map(int, time_string.split(":"))
-#     time_obj = time(hour=hours, minute=minutes)
-#     return time_obj
-
-# def load_time_data(request):
-#     with open('stopFrom_stop_to.csv', 'r') as file:
-#         reader = csv.reader(file)
-#         fields = next(reader)
-#         counter = 1
-#         for stop in reader:
-#             start = stop[0]
-#             if start == "0":
-#                 continue
-#             end_list = json.loads(stop[1])
-#             for end in end_list:
-#                 if end == "0":
-#                     continue
-#                 from_stop = BusStop.objects.get(code=start)
-#                 end_stop = BusStop.objects.get(code=end)
-#                 n = EndStop.objects.create(
-#                     from_stop=from_stop,
-#                     stop=end_stop
-#                 )
-#                 n.save()
-#                 try:
-#                     with open(f'bus_schedule/{start}_to_{end}.csv', 'r') as f:
-#                         temp_reader = csv.reader(f)
-#                         temp_fields = next(temp_reader)
-#                         for row in temp_reader:
-#                             dispatch = get_time_obj(row[0])
-#                             arrival = get_time_obj(row[1])
-#                             BusSchedule.objects.create(
-#                                 end_stop=n,
-#                                 dispatch=dispatch,
-#                                 arrival=arrival
-#                             )
-#                 except:
-#                     print(f"Can't load data for {start}>{end}")
-                
-                            
-#                 print(counter)
-#                 counter+=1
-#     return HttpResponse("All data loaded successfully")
-
-
-# def starting_config(request):
-#     with open('address_with_code.csv', 'r') as file:
-#         reader = csv.reader(file)
-#         fields = next(reader)
-#         for row in reader:
-#             obj = BusStop.objects.get(code=row[0])
-#             obj.start = True
-#             obj.save()
-#     return HttpResponse("Starting points add successfully")
-
-# def load_location_data(request):
-#     with open('location_data.csv', 'r') as file:
-#         reader = csv.reader(file)
-#         next(reader)
-#         for row in reader:
-#             code = row[0]
-#             lat = row[2]
-#             lng = row[3]
-#             obj = BusStop.objects.get(code=code)
-#             obj.lat = lat
-#             obj.lng = lng
-#             obj.save()
-#     return HttpResponse("Location data loaded.")

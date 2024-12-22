@@ -20,6 +20,9 @@ class Route(models.Model):
     def __str__(self):
         return f"Route: {self.name}"
 
+    def total_stops(self):
+        return self.route_stops.count()
+
 
 class RouteStop(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="route_stops")  # Associated route
