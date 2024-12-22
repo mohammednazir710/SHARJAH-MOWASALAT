@@ -12,12 +12,14 @@ class RouteAdmin(admin.ModelAdmin):
     list_display = ("name", "start_stop", "end_stop")
     search_fields = ("name",)
     list_filter = ("start_stop", "end_stop")
+    
 
 @admin.register(RouteStop)
 class RouteStopAdmin(admin.ModelAdmin):
     list_display = ("route", "stop", "order")
     list_filter = ("route",)
     ordering = ("route", "order")
+    autocomplete_fields = ['stop']
 
 @admin.register(BusSchedule)
 class BusScheduleAdmin(admin.ModelAdmin):

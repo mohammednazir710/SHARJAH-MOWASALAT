@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-# from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse
 # from .models import BusStop
-# from main.models import BusStop, EndStop, BusSchedule, History
+from main.models import BusStop, BusSchedule, History, Route, RouteStop
 # import csv, json
 # from datetime import time
 
@@ -10,45 +10,58 @@ from django.shortcuts import render, redirect
 def index(request):
     return render(request, 'index.html')
 
-# def route(request):
-#     history = History.objects.filter(key=request.session.session_key)
-#     return render(request, 'route.html', {'history': history})
+def route(request):
+    history = History.objects.filter(key=request.session.session_key)
+    return render(request, 'route.html', {'history': history})
 
-# def sayer(request):
-#     return render(request, 'sayer.html')
+def sayer(request):
+    return render(request, 'sayer.html')
 
-# def career(request):
-#     return render(request, 'career.html')
+def career(request):
+    return render(request, 'career.html')
 
-# def mission_and_vision(request):
-#     return render(request, 'mission_and_vision.html')
+def mission_and_vision(request):
+    return render(request, 'mission_and_vision.html')
 
-# def schadule(request):
-#     starting_points = BusStop.objects.filter(start=True)
-#     return render(request, 'schadule.html', {'starting_points': starting_points})
+def schadule(request):
+    starting_points = BusStop.objects.all()
+    return render(request, 'schadule.html', {'starting_points': starting_points})
 
 # def test(request):
 #     return render(request, 'test.html')
 
-# def delete_history(request):
-#     if request.session.session_key:
-#         History.objects.filter(key=request.session.session_key).delete()
-#     return redirect(request.META.get('HTTP_REFERER', '/fallback-url'))
+def delete_history(request):
+    if request.session.session_key:
+        History.objects.filter(key=request.session.session_key).delete()
+    return redirect(request.META.get('HTTP_REFERER', '/fallback-url'))
 
 
-# def get_end_points(request, start_code):
-#     # Find the starting bus stop
-#     start_stop = BusStop.objects.filter(code=start_code).first()
-#     if not start_stop:
-#         return JsonResponse([], safe=False)
+from django.http import JsonResponse
+from django.db.models import Q
 
-#     # Get all destinations for the selected start stop
-#     end_stops = EndStop.objects.filter(from_stop=start_stop)
-#     data = [
-#         {"code": end_stop.stop.code, "name": end_stop.stop.name}
-#         for end_stop in end_stops
-#     ]
-#     return JsonResponse(data, safe=False)
+def get_end_points(request, start_id):
+    # Find the starting bus stop
+    start_stop = BusStop.objects.filter(id=start_id).first()
+    if not start_stop:
+        return JsonResponse([], safe=False)
+
+    # Get all routes where the start stop exists
+    routes_with_start = RouteStop.objects.filter(stop=start_stop).values_list('route_id', flat=True)
+
+    # Get all stops in those routes except the start stop itself
+    end_stops = RouteStop.objects.filter(
+        route_id__in=routes_with_start
+    ).exclude(stop=start_stop)
+
+    # Eliminate duplicate stops and prepare the response data
+    unique_stops = end_stops.values('stop__id', 'stop__name').distinct()
+    data = [
+        {"id": stop['stop__id'], "name": stop['stop__name']}
+        for stop in unique_stops
+    ]
+
+    return JsonResponse(data, safe=False)
+
 
 # def get_schedules(request, start_point_code, end_point_code):
 #     schedules = BusSchedule.objects.filter(
