@@ -25,7 +25,7 @@ def mission_and_vision(request):
     return render(request, 'mission_and_vision.html')
 
 def schadule(request):
-    starting_points = BusStop.objects.all()
+    starting_points = BusStop.objects.all().order_by('name')
     return render(request, 'schadule.html', {'starting_points': starting_points})
 
 # def test(request):
@@ -52,7 +52,7 @@ def get_end_points(request, start_id):
     ).exclude(stop=start_stop)
 
     # Eliminate duplicate stops and prepare the response data
-    unique_stops = end_stops.values('stop__id', 'stop__name').distinct()
+    unique_stops = end_stops.values('stop__id', 'stop__name').distinct().order_by('stop__name')
     data = [
         {"id": stop['stop__id'], "name": stop['stop__name']}
         for stop in unique_stops
@@ -69,15 +69,22 @@ def get_schedules(request, start_point_id, end_point_id):
     start_point_order = RouteStop.objects.get(stop_id=start_point_id, route=common_route).order
     end_point_order = RouteStop.objects.get(stop_id=end_point_id, route=common_route).order
     print(start_point_order, end_point_order, common_route.total_stops())
-    total_time = 46
+    reverse = False if start_point_order < end_point_order else True
+    total_time = common_route.schedules.filter(reverse=reverse).first().travel_duration()
+    print(total_time)
     total_stops = common_route.total_stops()
     timeaddition = total_time/(total_stops-1)
     if start_point_order==1 and end_point_order==total_stops:
         timeaddition = 0
-    add_with_dispatch = math.ceil(timeaddition*(start_point_order-1)) if timeaddition != 0 else 0
-    minus_from_arraival = math.floor(timeaddition*(total_stops-end_point_order)) if timeaddition != 0 else 0
+    if reverse:
+        add_with_dispatch = math.ceil(timeaddition*(total_stops-start_point_order)) if timeaddition != 0 else 0
+        minus_from_arraival = math.floor(timeaddition*(end_point_order-1)) if timeaddition != 0 else 0
+    else:    
+        add_with_dispatch = math.ceil(timeaddition*(start_point_order-1)) if timeaddition != 0 else 0
+        minus_from_arraival = math.floor(timeaddition*(total_stops-end_point_order)) if timeaddition != 0 else 0
     schedules = BusSchedule.objects.filter(
-        route=common_route
+        route=common_route,
+        reverse=reverse
         )
     print("Timeaddition: ",timeaddition)
     print("Add with dispatch: ", add_with_dispatch)
@@ -95,8 +102,10 @@ def get_schedules(request, start_point_id, end_point_id):
     return JsonResponse(data, safe=False)
 
 def get_bus_stops(request):
-    # Fetch all bus stops from the database
-    bus_stops = BusStop.objects.all().values('name', 'latitude', 'longitude')
+    # Fetch all bus stops from the database and sort them alphabetically by name
+    bus_stops = BusStop.objects.all().values('name', 'latitude', 'longitude').order_by('name')
+    
+    # Convert the QuerySet to a list and return as JSON response
     return JsonResponse(list(bus_stops), safe=False)
 
 
@@ -188,10 +197,11 @@ def load_data(request):
     with open('data.csv', 'r') as file:
         reader = csv.reader(file)
         fields = next(reader)
-        route_ = Route.objects.get(name="99")
+        route_ = Route.objects.get(name="88")
         for stop in reader:
             BusSchedule.objects.create(
                 route=route_,
+                reverse=True,
                 dispatch_time=stop[0],
                 arrival_time=stop[1]
             )
