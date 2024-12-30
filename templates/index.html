@@ -106,7 +106,7 @@
         <a href="#" id="list_view" class=" border p-2">List View</a>
 
     </div>
-    {% else %}
+    {% else %}  
     <!-- Bottom menu bar -->
     <div class="bottom-menu">
         <a href="#" id="home" class="rounded-circle border p-2 bg-primary"><i class="fas fa-home text-white"></i></a>
@@ -246,20 +246,35 @@
         style="position: absolute; top: 20px; left: 50px; z-index: 999;" onclick="location.href=`/`">
         <i class="fa fa-arrow-left"></i>
     </button>
+    <input type="hidden" id="stop_coords" value="{{ stop_coords }}">
+
     <input type="hidden" name="start_loc" id="start_loc" value="{{start_loc}}">
     <input type="hidden" name="start_bus_loc" id="start_bus_loc" value="{{start_bus_loc}}">
     <input type="hidden" name="end_bus_loc" id="end_bus_loc" value="{{end_bus_loc}}">
     <input type="hidden" name="end_loc" id="end_loc" value="{{end_loc}}">
     <script>
-        const locations = [
-            document.getElementById('start_loc').value, // Example: 1st location
-            document.getElementById('start_bus_loc').value, // 2nd location
-            document.getElementById('end_bus_loc').value,   // 3rd location
-            document.getElementById('end_loc').value, // 4th location
-        ];
+        document.addEventListener("DOMContentLoaded", function () {
+            // Extract data from Django context
+            const startLoc = "{{ start_loc }}";
+            const endLoc = "{{ end_loc }}";
+            const stopCoords = {{ stop_coords|safe }}; // Django renders the list safely as JSON
+            const isReverse = {{ is_reverse|yesno:"true,false" }}; // Convert to JS boolean
 
-        showRoutes(locations);
+            // Combine start, intermediate stops, and end into a single array
+            const locations = [
+                startLoc, 
+                ...stopCoords, 
+                endLoc
+            ];
+            console.log(locations)
+    
+            // Call the showRoutes function with the combined locations
+            showRoutes(locations);
+    
+        });
     </script>
+    
+    
     {% endif %}
 </body>
 

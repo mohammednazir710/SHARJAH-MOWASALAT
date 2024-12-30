@@ -12,7 +12,7 @@ urlpatterns = [
     path('get-end-points/<int:start_id>/', views.get_end_points, name='get_end_points'),
     path('get-schedules/<int:start_point_id>/<int:end_point_id>/', views.get_schedules, name='get_schedules'),
     path('bus-stops/', views.get_bus_stops, name='get_bus_stops'),
-    # path('temp_route_view', views.temp_route, name="route_view"),
+    path('temp_route_view', views.temp_route, name="route_view"),
     path('clear-history/', views.delete_history, name='clear_history')
 
 ]

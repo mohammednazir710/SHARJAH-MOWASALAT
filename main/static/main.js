@@ -123,69 +123,48 @@ document.getElementById("closeInfo").addEventListener("click", function () {
 
 let routingControls = []; // To store multiple routing controls
 
-// Function to show routes for multiple coordinates
 function showRoutes(locations) {
-    // Remove existing routes
-    routingControls.forEach(control => map.removeControl(control));
-    routingControls = [];
+    // Ensure locations are valid
+    console.log("All locations:", locations);
 
-    // Clear route details container
-    const routeDetailsContainer = document.getElementById('route-details');
-    routeDetailsContainer.innerHTML = '';
+    const validLocations = locations.filter(location => {
+        const [lat, lng] = location.split(',').map(Number);
+        return !isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+    });
 
-    // Iterate through the locations and add routes between consecutive points
-    for (let i = 0; i < locations.length - 1; i++) {
-        const start = locations[i].split(',').map(Number);
-        const end = locations[i + 1].split(',').map(Number);
-
-        // Assign a random color for each route segment
-        const routeColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-
-        // Add routing control for the segment
-        const routingControl = L.Routing.control({
-            waypoints: [
-                L.latLng(start[0], start[1]),
-                L.latLng(end[0], end[1])
-            ],
-            routeWhileDragging: false,
-            addWaypoints: false, // Disable waypoint dragging
-            lineOptions: {
-                styles: [{ color: routeColor, opacity: 0.8, weight: 4 }]
-            },
-            show: false // Hide default route instructions
-        }).addTo(map);
-
-        // Event listener for custom instructions
-        routingControl.on('routesfound', (function (index) {
-            return function (e) {
-                const routes = e.routes[0]; // Take the first route for simplicity
-        
-                // Add a header for the route
-                routeDetailsContainer.innerHTML += `<h4>Route ${index + 1}:</h4>`;
-        
-                // Add summary info
-                const distance = (routes.summary.totalDistance / 1000).toFixed(2); // Convert to km
-                const time = Math.round(routes.summary.totalTime / 60); // Convert to minutes
-                routeDetailsContainer.innerHTML += `<p><strong>Distance:</strong> ${distance} km</p>`;
-                routeDetailsContainer.innerHTML += `<p><strong>Time:</strong> ${time} mins</p>`;
-        
-                // Add detailed instructions (skip for Route 2)
-                if (index !== 1) { // Skip detailed instructions for the second route
-                    routeDetailsContainer.innerHTML += '<ol>'; // Ordered list for steps
-                    routes.instructions.forEach(step => {
-                        routeDetailsContainer.innerHTML += `<li>${step.text} (${(step.distance / 1000).toFixed(2)} km)</li>`;
-                    });
-                    routeDetailsContainer.innerHTML += '</ol>'; // Close ordered list
-                }
-                routeDetailsContainer.innerHTML += `<hr>`;
-
-            };
-        })(i));
-        
-
-        // Store the routing control
-        routingControls.push(routingControl);
+    if (validLocations.length < 2) {
+        console.error("Insufficient valid locations for routing.");
+        return;
     }
+
+    console.log("Valid locations:", validLocations);
+
+    // Add markers for each location
+    validLocations.forEach((location, index) => {
+        const [lat, lng] = location.split(',').map(Number);
+        L.marker([lat, lng]).addTo(map).bindPopup(`Stop ${index + 1}`);
+    });
+
+    // Add route using OSRM API
+    const waypoints = validLocations.map(location => {
+        const [lat, lng] = location.split(',').map(Number);
+        return L.latLng(lat, lng);
+    });
+
+    L.Routing.control({
+        waypoints,
+        router: new L.Routing.osrmv1({
+            serviceUrl: 'https://router.project-osrm.org/route/v1',
+            profile: 'driving', // You can experiment with 'driving', 'foot', or 'cycling'
+            useHints: false,
+        }),
+        routeWhileDragging: false, // Disable route dragging
+        fitSelectedRoutes: true,  // Zoom map to fit the route
+        showAlternatives: false, // Disable alternative routes
+        createMarker: (i, wp) => {
+            return L.marker(wp.latLng).bindPopup(`Stop ${i + 1}`);
+        },
+    }).addTo(map);
 }
 
 

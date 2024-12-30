@@ -109,82 +109,121 @@ def get_bus_stops(request):
     return JsonResponse(list(bus_stops), safe=False)
 
 
-# from math import radians, sin, cos, sqrt, atan2
+from math import radians, sin, cos, sqrt, atan2
 
-# def haversine(lat1, lon1, lat2, lon2):
-#     # Convert latitude and longitude from degrees to radians
-#     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+def haversine(lat1, lon1, lat2, lon2):
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
 
-#     # Haversine formula
-#     dlat = lat2 - lat1
-#     dlon = lon2 - lon1
-#     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-#     c = 2 * atan2(sqrt(a), sqrt(1 - a))
-#     R = 6371  # Earth's radius in kilometers
-#     return R * c
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    R = 6371  # Earth's radius in kilometers
+    return R * c
 
-# def find_nearest_bus_stop(lat, lng):
-#     bus_stops = BusStop.objects.all()
-#     nearest_stop = None
-#     min_distance = float('inf')
+def find_nearest_bus_stop_within_route(lat, lng, route):
+    stops = RouteStop.objects.filter(route=route)
+    nearest_stop = None
+    min_distance = float('inf')
 
-#     for stop in bus_stops:
-#         distance = haversine(lat, lng, float(stop.lat), float(stop.lng))
-#         if distance < min_distance:
-#             min_distance = distance
-#             nearest_stop = stop
+    for route_stop in stops:
+        stop = route_stop.stop
+        distance = haversine(lat, lng, stop.latitude, stop.longitude)
+        if distance < min_distance:
+            min_distance = distance
+            nearest_stop = route_stop
 
-#     return nearest_stop
+    return nearest_stop
 
-# def temp_route(request):
-#     if request.method == "POST":
-#         start_lat = float(request.POST.get('startLat'))
-#         start_lng = float(request.POST.get('startLng'))
-#         end_lat = float(request.POST.get('endLat'))
-#         end_lng = float(request.POST.get('endLng'))
 
-#         start_loc_name = request.POST.get('startLocName')
-#         end_loc_name = request.POST.get('endLocName')
+def temp_route(request):
+    if request.method == "POST":
+        start_lat = float(request.POST.get('startLat'))
+        start_lng = float(request.POST.get('startLng'))
+        end_lat = float(request.POST.get('endLat'))
+        end_lng = float(request.POST.get('endLng'))
 
-#         # Find nearest bus stops
+        start_loc_name = request.POST.get('startLocName')
+        end_loc_name = request.POST.get('endLocName')
+
+        # Fetch all routes
+        routes = Route.objects.all()
+        selected_route = None
+        selected_start = None
+        selected_end = None
+        is_reverse = False
+
+        for route in routes:
+            start_stop = find_nearest_bus_stop_within_route(start_lat, start_lng, route)
+            end_stop = find_nearest_bus_stop_within_route(end_lat, end_lng, route)
+
+            if start_stop and end_stop:
+                if start_stop.order < end_stop.order:
+                    # Normal route
+                    selected_route = route
+                    selected_start = start_stop
+                    selected_end = end_stop
+                    is_reverse = False
+                    break
+                elif start_stop.order > end_stop.order:
+                    # Reverse route
+                    selected_route = route
+                    selected_start = start_stop
+                    selected_end = end_stop
+                    is_reverse = True
+                    break
+
+        if not selected_route:
+            return render(request, 'index.html', {'error': 'No valid route found for the selected points.'})
+
+        # Get intermediate stops
+        if is_reverse:
+            intermediate_stops = RouteStop.objects.filter(
+                route=selected_route,
+                order__gte=selected_end.order,
+                order__lte=selected_start.order
+            ).order_by('-order')  # Reverse order for reverse route
+        else:
+            intermediate_stops = RouteStop.objects.filter(
+                route=selected_route,
+                order__gte=selected_start.order,
+                order__lte=selected_end.order
+            ).order_by('order')  # Normal order
+
+        # Collect coordinates for mapping
+        stop_coords = [
+            (f"{stop.stop.latitude},{stop.stop.longitude}") for stop in intermediate_stops
+        ]
+
+        # Save to history
+        session_key = request.session.session_key or request.session.create()
+        distance = haversine(start_lat, start_lng, end_lat, end_lng)
+
+        History.objects.create(
+            key=session_key,
+            start=f'{start_lat},{start_lng}',
+            end=f'{end_lat},{end_lng}',
+            start_loc_name=start_loc_name,
+            end_loc_name=end_loc_name,
+            distance=distance
+        )
         
-#         start_bus_stop = find_nearest_bus_stop(start_lat, start_lng)
-#         end_bus_stop = find_nearest_bus_stop(end_lat, end_lng)
+        context = {
+            'route_view': True,
+            'start_loc': f'{start_lat},{start_lng}',
+            'end_loc': f'{end_lat},{end_lng}',
+            'stop_coords': stop_coords,
+            'route_name': selected_route.name,
+            'start_stop_name': selected_start.stop.name,
+            'end_stop_name': selected_end.stop.name,
+            'is_reverse': is_reverse,  # Added for frontend, if needed
+        }
 
-#         start_loc = f'{start_lat},{start_lng}'
-#         end_loc = f'{end_lat},{end_lng}'
-#         start_bus_loc = f'{start_bus_stop.lat},{start_bus_stop.lng}'
-#         end_bus_loc = f'{end_bus_stop.lat},{end_bus_stop.lng}'
+        return render(request, 'index.html', context)
 
-#         # Get the current session key
-#         session_key = request.session.session_key
-        
-#         # If session hasn't been created yet, force it to create
-#         if not session_key:
-#             request.session.create()
-#             session_key = request.session.session_key
-#         distance = haversine(start_lat, start_lng, end_lat, end_lng)
-#         History.objects.create(
-#             key=session_key,
-#             start=start_loc,
-#             end=end_loc,
-#             start_loc_name=start_loc_name,
-#             end_loc_name=end_loc_name,
-#             distance=distance
-#         )
-
-
-#         con = {
-#             'route_view': True,
-#             'start_loc': start_loc,
-#             'end_loc': end_loc,
-#             'start_bus_loc':start_bus_loc,
-#             'end_bus_loc':end_bus_loc
-
-#         }
-#         print(con.values())
-#     context = con if con else {}
-#     return render(request, 'index.html', context)
+    return render(request, 'index.html')
 
 
 
