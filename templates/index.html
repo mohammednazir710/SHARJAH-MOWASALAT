@@ -87,6 +87,7 @@
             font-size: 20px;
             font-family: Arial, sans-serif;
         }
+
     </style>
 </head>
 
@@ -266,12 +267,14 @@
                 ...stopCoords, 
                 endLoc
             ];
-            console.log(locations)
     
             // Call the showRoutes function with the combined locations
             showRoutes(locations);
     
         });
+        document.addEventListener('load', function(){
+            document.querySelector('.leaflet-right').style.display="none"
+        })
     </script>
     
     

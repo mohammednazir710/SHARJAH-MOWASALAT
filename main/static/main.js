@@ -20,13 +20,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 fetch('static/export.geojson')
-  .then(response => response.json())
-  .then(geoJsonData => {
-    L.geoJSON(geoJsonData).addTo(map);
-  })
-  .catch(error => {
-    console.log('Error loading GeoJSON data:', error);
-  });
+    .then(response => response.json())
+    .then(geoJsonData => {
+        L.geoJSON(geoJsonData).addTo(map);
+    })
+    .catch(error => {
+        console.log('Error loading GeoJSON data:', error);
+    });
 
 // Initialize variables
 var locationMarker;
@@ -139,33 +139,72 @@ function showRoutes(locations) {
 
     console.log("Valid locations:", validLocations);
 
-    // Add markers for each location
-    validLocations.forEach((location, index) => {
-        const [lat, lng] = location.split(',').map(Number);
-        L.marker([lat, lng]).addTo(map).bindPopup(`Stop ${index + 1}`);
-    });
-
     // Add route using OSRM API
     const waypoints = validLocations.map(location => {
         const [lat, lng] = location.split(',').map(Number);
         return L.latLng(lat, lng);
     });
 
-    L.Routing.control({
+    // Create routing control
+    const routingControl = L.Routing.control({
         waypoints,
         router: new L.Routing.osrmv1({
             serviceUrl: 'https://router.project-osrm.org/route/v1',
-            profile: 'driving', // You can experiment with 'driving', 'foot', or 'cycling'
+            profile: 'driving',
+            language: 'en', // Set routing instructions to English
             useHints: false,
         }),
         routeWhileDragging: false, // Disable route dragging
         fitSelectedRoutes: true,  // Zoom map to fit the route
         showAlternatives: false, // Disable alternative routes
-        createMarker: (i, wp) => {
-            return L.marker(wp.latLng).bindPopup(`Stop ${i + 1}`);
+        addWaypoints: false,     // Prevent adding default markers
+        createMarker: (i, wp, n) => {
+            // Only create markers for the first and last waypoints
+            if (i === 0 || i === n - 1) {
+                return L.marker(wp.latLng).bindPopup(`Stop ${i === 0 ? 'Start' : 'End'}`);
+            }
+            return null; // No marker for intermediate waypoints
         },
+        lineOptions: {
+            styles: [{ color: 'blue', weight: 4 }] // Custom route styling
+        },
+        // Disable default instruction and summary panel
+        show: false,
     }).addTo(map);
+
+    // Customize route details
+    routingControl.on('routesfound', function (e) {
+        const routes = e.routes;
+        const routeDetailsContainer = document.getElementById('route-details');
+
+        // Clear existing content
+        routeDetailsContainer.innerHTML = '';
+
+        // Display details of the first route
+        const steps = routes[0].instructions; // Extract instructions from the route
+        steps.forEach((step, idx) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.style.marginBottom = '8px';
+
+            // Create detailed description for each step
+            const stepDescription = `
+                <strong>Step ${idx + 1}:</strong> ${step.text} 
+                <br>
+                <strong>Distance:</strong> ${step.distance.toFixed(2)} meters 
+                <br>
+                <strong>Time:</strong> ${Math.round(step.time)} seconds 
+                <br>
+                <strong>Direction:</strong> ${step.direction || 'N/A'}
+            `;
+
+            stepDiv.innerHTML = stepDescription;
+            routeDetailsContainer.appendChild(stepDiv);
+        });
+    });
 }
+    
+
+
 
 
 // Bus stops data (example locations)
